@@ -9,5 +9,5 @@ public interface IUserRepository {
     User consultarPorId(String id);
     List<User> consultarTodos();
     User modificar(String id, User user);
-    void eliminar(String id);
+    void eliminar(User user);
 }
