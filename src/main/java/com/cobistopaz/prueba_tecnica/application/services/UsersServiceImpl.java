@@ -3,7 +3,6 @@ package com.cobistopaz.prueba_tecnica.application.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
