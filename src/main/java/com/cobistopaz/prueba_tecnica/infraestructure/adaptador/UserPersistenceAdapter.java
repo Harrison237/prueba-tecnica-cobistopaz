@@ -13,9 +13,6 @@ import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.Us
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.entity.UserEntity;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.mappers.IUserMapperJpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-
 @Repository
 @Transactional
 public class UserPersistenceAdapter implements UsersPort {
@@ -24,19 +21,19 @@ public class UserPersistenceAdapter implements UsersPort {
     private UserRepositoryJpa usersManager;
 
     @Override
-    public User guardar(User user) {
+    public User guardar(User user) throws Exception {
         UserEntity entity = IUserMapperJpa.mapper.desdeDomainAEntity(user);
 
         return IUserMapperJpa.mapper.desdeEntityADomain(usersManager.save(entity));
     }
 
     @Override
-    public User consultarPorId(String id) {
+    public User consultarPorId(String id) throws Exception {
         return IUserMapperJpa.mapper.desdeEntityADomain(usersManager.findById(id).get());
     }
 
     @Override
-    public List<User> consultarTodos() {
+    public List<User> consultarTodos() throws Exception {
         List<UserEntity> users = usersManager.findAll();
 
         return users.stream().map(
@@ -44,14 +41,14 @@ public class UserPersistenceAdapter implements UsersPort {
     }
 
     @Override
-    public User modificar(String id, User user) {
+    public User modificar(String id, User user) throws Exception {
         UserEntity entity = IUserMapperJpa.mapper.desdeDomainAEntity(user);
 
         return IUserMapperJpa.mapper.desdeEntityADomain(usersManager.save(entity));
     }
 
     @Override
-    public void eliminar(User user) {
+    public void eliminar(User user) throws Exception {
         UserEntity entity = IUserMapperJpa.mapper.desdeDomainAEntity(user);
 
         usersManager.delete(entity);
