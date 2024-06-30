@@ -6,7 +6,7 @@ import com.cobistopaz.prueba_tecnica.domain.model.User;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.UserDto;
 
 public interface IUsersService {
-    User crearUsuario(String nombreUsuario, String contrasena, String roles) throws Exception;
+    User crearUsuario(User user) throws Exception;
     User buscarPorId(String id) throws Exception;
     List<User> buscarTodos() throws Exception;
     User modificar(String id, User user) throws Exception;
