@@ -6,40 +6,42 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cobistopaz.prueba_tecnica.application.ports.UsersPort;
+import com.cobistopaz.prueba_tecnica.application.usecases.IUsersService;
 import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioExistenteException;
 import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioNoEncontradoException;
 import com.cobistopaz.prueba_tecnica.domain.model.User;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.mappers.IUserMapper;
-import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.UserDto;
-import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.services.IUsersService;
+import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.RegisterUserDto;
+import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.UpdateUserDto;
+
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class UsersServiceImpl implements IUsersService {
 
     @Autowired
     private UsersPort usersRepository;
     private PasswordEncoder codificador;
 
-    public UsersServiceImpl() {
-        codificador = new BCryptPasswordEncoder();
-    }
-
     @Override
-    public User crearUsuario(User user) throws Exception {
+    public User crearUsuario(RegisterUserDto user) throws Exception {
         try {
-            user.setId(System.currentTimeMillis() + "");
-            user.setContrasena(codificador.encode(user.getContrasena()));
-
-            user = usersRepository.guardar(user);
+            User registrado = usersRepository.guardar(
+                    User.builder()
+                            .id(System.currentTimeMillis() + "")
+                            .nombreUsuario(user.getNombreUsuario())
+                            .contrasena(codificador.encode(user.getContrasena()))
+                            .roles(user.getRoles())
+                            .build());
             // Al retornar el usuario creado, en la petición no debería ir la contraseña
             // encriptada
-            user.setContrasena("");
-            return user;
+            registrado.setContrasena("");
+            return registrado;
         } catch (DataIntegrityViolationException e) {
             throw new UsuarioExistenteException("Ya existe un usuario con el nombre: " + user.getNombreUsuario());
         }
@@ -66,7 +68,7 @@ public class UsersServiceImpl implements IUsersService {
     }
 
     @Override
-    public User modificar(String id, User user) throws Exception {
+    public User modificar(String id, UpdateUserDto user) throws Exception {
         try {
             User actual = usersRepository.consultarPorId(id);
             boolean cambiado = false;
@@ -114,7 +116,7 @@ public class UsersServiceImpl implements IUsersService {
     }
 
     @Override
-    public User desdeDtoAUser(UserDto dto) {
+    public User desdeDtoAUser(RegisterUserDto dto) {
         return IUserMapper.mapper.desdeDtoADomain(dto);
     }
 

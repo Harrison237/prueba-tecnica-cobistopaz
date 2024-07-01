@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.cobistopaz.prueba_tecnica.domain.model.User;
-import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.UserDto;
+import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.RegisterUserDto;
 
 @Mapper
 public interface IUserMapper {
@@ -14,10 +14,10 @@ public interface IUserMapper {
     @Mapping(source = "nombreUsuario", target = "nombreUsuario")
     @Mapping(source = "contrasena", target = "contrasena")
     @Mapping(source = "roles", target = "roles")
-    public User desdeDtoADomain(UserDto dto);
+    public User desdeDtoADomain(RegisterUserDto dto);
 
     @Mapping(source = "nombreUsuario", target = "nombreUsuario")
     @Mapping(source = "contrasena", target = "contrasena")
     @Mapping(source = "roles", target = "roles")
-    public UserDto desdeDomainADto(User user);
+    public RegisterUserDto desdeDomainADto(User user);
 }
