@@ -1,11 +1,11 @@
 package com.cobistopaz.prueba_tecnica.infraestructure.adaptador;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import com.cobistopaz.prueba_tecnica.application.ports.UsersPort;
 import com.cobistopaz.prueba_tecnica.domain.model.User;
@@ -13,8 +13,7 @@ import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.Us
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.entity.UserEntity;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa.mappers.IUserMapperJpa;
 
-@Repository
-@Transactional
+@Component
 public class UserPersistenceAdapter implements UsersPort {
 
     @Autowired
@@ -52,6 +51,11 @@ public class UserPersistenceAdapter implements UsersPort {
         UserEntity entity = IUserMapperJpa.mapper.desdeDomainAEntity(user);
 
         usersManager.delete(entity);
+    }
+
+    @Override
+    public User consultarPorNombreUsuario(String nombreUsuario) throws NoSuchElementException {
+        return IUserMapperJpa.mapper.desdeEntityADomain(usersManager.findOneByNombreUsuario(nombreUsuario).get());
     }
 
 }

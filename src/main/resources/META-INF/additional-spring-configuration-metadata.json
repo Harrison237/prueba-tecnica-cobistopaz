@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "spring.datasource.dbname",
+    "type": "java.lang.String",
+    "description": "Nombre de la base de datos a conectar"
+  },
+  {
+    "name": "security.jwt.secret",
+    "type": "java.lang.String",
+    "description": "Secret para encriptar todos los tokens de jwt"
+  },
+  {
+    "name": "security.jwt.expiretime",
+    "type": "java.lang.String",
+    "description": "Tiempo de expiración para los tokens de jwt"
+  }
+]}

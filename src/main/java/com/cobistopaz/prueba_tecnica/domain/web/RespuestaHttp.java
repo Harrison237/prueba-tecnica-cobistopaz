@@ -1,5 +1,7 @@
 package com.cobistopaz.prueba_tecnica.domain.web;
 
+import com.google.gson.Gson;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +18,10 @@ public class RespuestaHttp {
     private int codigoStatus;
     private long tiempo;
     private Object contenido;
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }
