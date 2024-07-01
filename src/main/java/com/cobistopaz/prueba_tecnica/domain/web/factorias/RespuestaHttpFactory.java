@@ -11,6 +11,10 @@ public class RespuestaHttpFactory {
         return crear(mensaje, codigo, contenido != null ? contenido : "");
     }
 
+    public static RespuestaHttp respuestaExitosa(int codigo, Object contenido) {
+        return crear("Ok", codigo, contenido);
+    }
+
     public static RespuestaHttp respuestaExitosa(String mensaje, int codigo, Object contenido) {
         return crear(mensaje, codigo, contenido);
     }

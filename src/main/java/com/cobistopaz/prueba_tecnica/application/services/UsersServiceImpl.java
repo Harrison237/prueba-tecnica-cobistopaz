@@ -2,6 +2,7 @@ package com.cobistopaz.prueba_tecnica.application.services;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,7 +35,11 @@ public class UsersServiceImpl implements IUsersService {
             user.setId(System.currentTimeMillis() + "");
             user.setContrasena(codificador.encode(user.getContrasena()));
 
-            return usersRepository.guardar(user);
+            user = usersRepository.guardar(user);
+            // Al retornar el usuario creado, en la petición no debería ir la contraseña
+            // encriptada
+            user.setContrasena("");
+            return user;
         } catch (DataIntegrityViolationException e) {
             throw new UsuarioExistenteException("Ya existe un usuario con el nombre: " + user.getNombreUsuario());
         }
@@ -43,7 +48,10 @@ public class UsersServiceImpl implements IUsersService {
     @Override
     public User buscarPorId(String id) throws Exception {
         try {
-            return usersRepository.consultarPorId(id);
+            User encontrado = usersRepository.consultarPorId(id);
+            encontrado.setContrasena("");
+
+            return encontrado;
         } catch (NoSuchElementException e) {
             throw new UsuarioNoEncontradoException("No existe un usuario con el id: " + id);
         }
@@ -51,7 +59,10 @@ public class UsersServiceImpl implements IUsersService {
 
     @Override
     public List<User> buscarTodos() throws Exception {
-        return usersRepository.consultarTodos();
+        return usersRepository.consultarTodos().stream().map(user -> {
+            user.setContrasena("");
+            return user;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -61,7 +72,7 @@ public class UsersServiceImpl implements IUsersService {
             boolean cambiado = false;
 
             // Lógica para asignar valores del objeto enviado y verificar si cambió en algo
-            // con el objeto actualmente persistido
+            // con el objeto actualmente persistido.
             // Se puede mejorar mediante los métodos de la clase Object, pero para efectos
             // prácticos y al ser solo 3 campos los que pueden cambiar entonces se deja así.
             if (user.getNombreUsuario() != null && !actual.getNombreUsuario().equals(user.getNombreUsuario())) {
@@ -77,12 +88,14 @@ public class UsersServiceImpl implements IUsersService {
                 actual.setContrasena(codificador.encode(user.getContrasena()));
             }
 
-            // Si no cambió nada, se retorna el objeto actual
-            if (!cambiado) {
-                return actual;
+            // Si se encontró algún cambio se envía a la base de datos
+            if (cambiado) {
+                actual = usersRepository.modificar(id, actual);
             }
 
-            return usersRepository.modificar(id, actual);
+            // Se oculta la contraseña en la respuesta
+            actual.setContrasena("");
+            return actual;
 
         } catch (NoSuchElementException e) {
             throw new UsuarioNoEncontradoException("No existe un usuario con el id: " + id);
@@ -93,7 +106,7 @@ public class UsersServiceImpl implements IUsersService {
     public void eliminar(String id) throws Exception {
         try {
             User usuario = usersRepository.consultarPorId(id);
-    
+
             usersRepository.eliminar(usuario);
         } catch (NoSuchElementException e) {
             throw new UsuarioNoEncontradoException("No existe un usuario con el id: " + id);
