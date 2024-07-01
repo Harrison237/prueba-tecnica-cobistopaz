@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.cobistopaz.prueba_tecnica.application.ports.UsersPort;
 import com.cobistopaz.prueba_tecnica.application.usecases.IUsersService;
+import com.cobistopaz.prueba_tecnica.domain.exceptions.ContrasenaException;
+import com.cobistopaz.prueba_tecnica.domain.exceptions.PeticionVaciaException;
 import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioExistenteException;
 import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioNoEncontradoException;
 import com.cobistopaz.prueba_tecnica.domain.model.User;
@@ -70,6 +72,11 @@ public class UsersServiceImpl implements IUsersService {
     @Override
     public User modificar(String id, UpdateUserDto user) throws Exception {
         try {
+            //Validación manual en caso de que no se envíe nada en el cuerpo de la petición
+            if (user.getNombreUsuario() == null && user.getContrasenaNueva() == null && user.getContrasenaActual() == null && user.getRoles() == null) {
+                throw new PeticionVaciaException("Debe enviar al menos un campo para actualizar.");
+            }
+
             User actual = usersRepository.consultarPorId(id);
             boolean cambiado = false;
 
@@ -85,9 +92,18 @@ public class UsersServiceImpl implements IUsersService {
                 cambiado = true;
                 actual.setRoles(user.getRoles());
             }
-            if (user.getContrasena() != null && !codificador.matches(user.getContrasena(), actual.getContrasena())) {
+            if (user.getContrasenaActual() == null && user.getContrasenaNueva() != null) {
+                throw new ContrasenaException("Debe ingresar la contraseña actual.");
+            }
+            if (user.getContrasenaActual() != null && user.getContrasenaNueva() != null) {
+                if (user.getContrasenaActual().equals(user.getContrasenaNueva())) {
+                    throw new ContrasenaException("Los campos de contraseña no deben ser iguales.");
+                }
+                if (!codificador.matches(user.getContrasenaActual(), actual.getContrasena())) {
+                    throw new ContrasenaException("La contraseña ingresada no coincide con la contraseña registrada previamente.");
+                }
                 cambiado = true;
-                actual.setContrasena(codificador.encode(user.getContrasena()));
+                actual.setContrasena(codificador.encode(user.getContrasenaNueva()));
             }
 
             // Si se encontró algún cambio se envía a la base de datos
@@ -105,9 +121,17 @@ public class UsersServiceImpl implements IUsersService {
     }
 
     @Override
-    public void eliminar(String id) throws Exception {
+    public void eliminar(String id, String contrasena) throws Exception {
         try {
+            if (contrasena == null) {
+                throw new ContrasenaException("Debe ingresar la contraseña para poder eliminar el usuario.");
+            }
+
             User usuario = usersRepository.consultarPorId(id);
+
+            if (!codificador.matches(contrasena, usuario.getContrasena())) {
+                throw new ContrasenaException("La contraseña ingresada no coincide con la contraseña registrada previamente. Operación cancelada.");
+            }
 
             usersRepository.eliminar(usuario);
         } catch (NoSuchElementException e) {

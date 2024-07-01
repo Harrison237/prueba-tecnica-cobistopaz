@@ -11,6 +11,6 @@ public interface IUsersService {
     User buscarPorId(String id) throws Exception;
     List<User> buscarTodos() throws Exception;
     User modificar(String id, UpdateUserDto user) throws Exception;
-    void eliminar(String id) throws Exception;
+    void eliminar(String id, String contrasena) throws Exception;
     User desdeDtoAUser(RegisterUserDto dto);
 }

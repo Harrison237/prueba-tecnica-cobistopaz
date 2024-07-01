@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.google.gson.Gson;
+
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -37,5 +39,10 @@ public class AppSecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    Gson gsonProvider() {
+        return new Gson();
     }
 }

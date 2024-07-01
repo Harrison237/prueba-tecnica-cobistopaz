@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateUserDto {
     private String nombreUsuario;
-    private String contrasena;
+    private String contrasenaActual;
+    private String contrasenaNueva;
     private String roles;
 }

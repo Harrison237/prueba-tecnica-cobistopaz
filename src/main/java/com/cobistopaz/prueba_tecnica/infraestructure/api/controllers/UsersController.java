@@ -8,6 +8,8 @@ import com.cobistopaz.prueba_tecnica.domain.web.factorias.RespuestaHttpFactory;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.RegisterUserDto;
 import com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto.UpdateUserDto;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,22 +43,22 @@ public class UsersController {
         }
 
         @PostMapping(value = "crear", produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<RespuestaHttp> crearNuevoUsuario(@RequestBody RegisterUserDto nuevoUsuario) throws Exception {
+        public ResponseEntity<RespuestaHttp> crearNuevoUsuario(@Valid @RequestBody RegisterUserDto nuevoUsuario) throws Exception {
                 return ResponseEntity.status(HttpStatus.CREATED).body(
                                 RespuestaHttpFactory.respuestaExitosa(
                                                 "Usuario creado satisfactoriamente", HttpStatus.CREATED.value(), usersService.crearUsuario(nuevoUsuario)));
         }
 
         @PatchMapping(value = "actualizar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<RespuestaHttp> actualizarUsuario(@RequestBody UpdateUserDto usuario, @PathVariable String id) throws Exception {
+        public ResponseEntity<RespuestaHttp> actualizarUsuario(@Valid @RequestBody UpdateUserDto usuario, @PathVariable String id) throws Exception {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                                 RespuestaHttpFactory.respuestaExitosa(
                                                 "Usuario actualizado exitosamente", HttpStatus.ACCEPTED.value(), usersService.modificar(id, usuario)));
         }
 
-        @DeleteMapping(value = "eliminar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-        public ResponseEntity<RespuestaHttp> eliminarUsuario(@PathVariable String id) throws Exception {
-                usersService.eliminar(id);
+        @DeleteMapping(value = "eliminar/{id}/{contrasena}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<RespuestaHttp> eliminarUsuario(@PathVariable String id, @PathVariable String contrasena) throws Exception {
+                usersService.eliminar(id, contrasena);
 
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                                 RespuestaHttpFactory.respuestaExitosa("Usuario eliminado exitosamente", HttpStatus.ACCEPTED.value(), ""));
