@@ -16,9 +16,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cobistopaz.prueba_tecnica.application.services.UserDetailsServiceImpl;
 import com.cobistopaz.prueba_tecnica.domain.security.IAuthManager;
-import com.cobistopaz.prueba_tecnica.infraestructure.api.security.jwt.JwtAuthManager;
 
 import lombok.AllArgsConstructor;
 
