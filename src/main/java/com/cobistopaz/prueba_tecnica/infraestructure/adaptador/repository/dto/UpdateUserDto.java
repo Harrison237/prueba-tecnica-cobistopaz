@@ -1,18 +1,15 @@
-package com.cobistopaz.prueba_tecnica.domain.model;
+package com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
-public class User {
-    private String id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateUserDto {
     private String nombreUsuario;
     private String contrasena;
     private String roles;
