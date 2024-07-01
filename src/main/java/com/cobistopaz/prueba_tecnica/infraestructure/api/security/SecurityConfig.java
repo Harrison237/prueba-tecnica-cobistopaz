@@ -14,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.cobistopaz.prueba_tecnica.application.security.JwtAuthenticationFilter;
 import com.cobistopaz.prueba_tecnica.application.security.JwtAuthorizationFilter;
+import com.cobistopaz.prueba_tecnica.domain.security.IAuthManager;
+
+import jakarta.servlet.DispatcherType;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -28,22 +31,19 @@ public class SecurityConfig {
 
     @Autowired
     private final UserDetailsService detailsService;
-
-    @Autowired
-    private final JwtAuthorizationFilter authorizationFilter;
+    private final IAuthManager jwtAuthManager;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager manager) throws Exception {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter();
         authenticationFilter.setAuthenticationManager(manager);
         authenticationFilter.setFilterProcessesUrl("/api/auth/login");
+        JwtAuthorizationFilter authorizationFilter = new JwtAuthorizationFilter(manager, jwtAuthManager, detailsService);
 
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .anyRequest()
-                        .authenticated())
+                        .anyRequest().authenticated())
                 .httpBasic(withDefaults())
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

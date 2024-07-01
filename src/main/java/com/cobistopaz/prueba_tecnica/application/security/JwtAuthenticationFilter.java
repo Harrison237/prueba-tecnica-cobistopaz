@@ -5,13 +5,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.cobistopaz.prueba_tecnica.application.implementations.UserDetailsImpl;
 import com.cobistopaz.prueba_tecnica.domain.exceptions.NoAutorizadoException;
 import com.cobistopaz.prueba_tecnica.domain.model.Credenciales;
+import com.cobistopaz.prueba_tecnica.domain.web.factorias.RespuestaHttpFactory;
 import com.cobistopaz.prueba_tecnica.infraestructure.api.security.jwt.JwtAuthManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -45,11 +51,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String token = authManager.generarToken(credenciales);
 
             response.addHeader("Authorization", "Bearer " + token);
-            response.getWriter().flush();
-
-            super.successfulAuthentication(request, response, chain, result);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(
+                RespuestaHttpFactory.respuestaError("Las credenciales son incorrectas. Verifique por favor.",
+                        HttpStatus.BAD_REQUEST.value()).toString());
+        return;
     }
 }
