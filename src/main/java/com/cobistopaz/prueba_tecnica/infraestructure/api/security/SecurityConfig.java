@@ -16,8 +16,6 @@ import com.cobistopaz.prueba_tecnica.application.security.JwtAuthenticationFilte
 import com.cobistopaz.prueba_tecnica.application.security.JwtAuthorizationFilter;
 import com.cobistopaz.prueba_tecnica.domain.security.IAuthManager;
 
-import jakarta.servlet.DispatcherType;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;

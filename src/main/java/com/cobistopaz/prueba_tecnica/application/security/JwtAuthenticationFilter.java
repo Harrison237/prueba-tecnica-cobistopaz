@@ -51,6 +51,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String token = authManager.generarToken(credenciales);
 
             response.addHeader("Authorization", "Bearer " + token);
+            response.setStatus(HttpStatus.ACCEPTED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.getWriter().write(
+                    RespuestaHttpFactory.respuestaExitosa(
+                            "Ha iniciado sesión correctamente. El token también podrá encontrarlo en las cabeceras de la petición",
+                            HttpStatus.ACCEPTED.value(), token)
+                            .toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().write(
                 RespuestaHttpFactory.respuestaError("Las credenciales son incorrectas. Verifique por favor.",
                         HttpStatus.BAD_REQUEST.value()).toString());

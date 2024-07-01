@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,10 +56,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (tokenHeader == null) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(
                     RespuestaHttpFactory
-                            .respuestaError("Debe ingresar un token de autorizacion", HttpStatus.BAD_REQUEST.value())
+                            .respuestaError("Debe ingresar un token de autorización", HttpStatus.BAD_REQUEST.value())
                             .toString());
             return;
         }
@@ -70,10 +69,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             username = authManager.extraerData(token).getNombreUsuario();
         } catch (Exception e) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(
                     RespuestaHttpFactory
-                            .respuestaError("El token ingresado no es valido", HttpStatus.UNAUTHORIZED.value())
+                            .respuestaError("El token ingresado no es válido", HttpStatus.UNAUTHORIZED.value())
                             .toString());
             return;
         }
