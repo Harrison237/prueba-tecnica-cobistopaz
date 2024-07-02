@@ -14,6 +14,7 @@ Para poder ejecutar dicho proyecto hay que tener en cuenta las siguientes recome
 3. Se deja adjunto el script para la creación de la base de datos con el fin de realizar la menor cantidad de trabajo posible. Los comandos
 	en el archivo .sql solo deben ser copiados y pegados en el gestor para crear la base de datos correctamente y con la estructura
 	que requiere el aplicativo para funcionar.
+4. MySQL se debe estar ejecutando al momento de querer iniciar el proyecto. No es necesario al momento de compilarlo.
 
 Compilación del proyecto:
 
