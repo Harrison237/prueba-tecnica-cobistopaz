@@ -2,6 +2,7 @@ package com.cobistopaz.prueba_tecnica.infraestructure.api.security.filters;
 
 import java.io.IOException;
 
+import com.cobistopaz.prueba_tecnica.infraestructure.api.security.IAuthManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cobistopaz.prueba_tecnica.application.services.JwtService;
 import com.cobistopaz.prueba_tecnica.domain.web.factorias.RespuestaHttpFactory;
 
 import io.jsonwebtoken.JwtException;
@@ -24,12 +24,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
-@Component
+@Component("jwtAuthorizationFilter")
 @AllArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    JwtService jwtService;
+    IAuthManager jwtService;
+
+    @Autowired
     UserDetailsService detailsService;
 
     @SuppressWarnings("deprecation")
