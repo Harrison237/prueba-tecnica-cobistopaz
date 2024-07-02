@@ -25,43 +25,43 @@ import lombok.AllArgsConstructor;
 public class DominioExceptionHandler {
 
     @ExceptionHandler(UsuarioNoEncontradoException.class)
-    public ResponseEntity<RespuestaHttp> manejadorUsuarioNoEncontrado(UsuarioNoEncontradoException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorUsuarioNoEncontrado(UsuarioNoEncontradoException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 
     @ExceptionHandler(UsuarioExistenteException.class)
-    public ResponseEntity<RespuestaHttp> manejadorUsuarioExistente(UsuarioExistenteException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorUsuarioExistente(UsuarioExistenteException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
     @ExceptionHandler(NoAutorizadoException.class)
-    public ResponseEntity<RespuestaHttp> manejadorUsuarioNoAutorizado(NoAutorizadoException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorUsuarioNoAutorizado(NoAutorizadoException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.UNAUTHORIZED.value()));
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<RespuestaHttp> manejadorUsuarioNoEncontrado(UsernameNotFoundException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorUsuarioNoEncontrado(UsernameNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 
     @ExceptionHandler(TokenInvalidoException.class)
-    public ResponseEntity<RespuestaHttp> manejadorTokenInvalido(TokenInvalidoException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorTokenInvalido(TokenInvalidoException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
     @ExceptionHandler(ContrasenaException.class)
-    public ResponseEntity<RespuestaHttp> manejadorErroresContrasena(ContrasenaException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorErroresContrasena(ContrasenaException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 RespuestaHttpFactory.respuestaError(e.getMessage(), HttpStatus.CONFLICT.value()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<RespuestaHttp> manejadorClaseNoValida(MethodArgumentNotValidException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorClaseNoValida(MethodArgumentNotValidException e) {
         System.out.println(e.getFieldValue("contrasenaActual"));
         List<String> errores = e.getAllErrors().stream().map(err -> err.getDefaultMessage()).toList();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
@@ -71,7 +71,7 @@ public class DominioExceptionHandler {
     }
 
     @ExceptionHandler(PeticionVaciaException.class)
-    public ResponseEntity<RespuestaHttp> manejadorPeticionVacia(PeticionVaciaException e) {
+    public ResponseEntity<RespuestaHttp<String>> manejadorPeticionVacia(PeticionVaciaException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 RespuestaHttpFactory.respuestaError(
                         e.getMessage(),

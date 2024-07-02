@@ -3,6 +3,7 @@ package com.cobistopaz.prueba_tecnica.infraestructure.adaptador.repository.Jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ public class UserRepositoryJpaTests {
 
     @BeforeEach
     void init() {
-        userPrueba = UserEntity
+        this.userPrueba = UserEntity
                 .builder()
                 .id(System.currentTimeMillis() + "")
                 .nombreUsuario("Harrison")
@@ -47,17 +48,19 @@ public class UserRepositoryJpaTests {
     public void testConsultarUsuarios() {
         UserEntity usuario2 = UserEntity
                 .builder()
-                .id(System.currentTimeMillis() + "")
-                .nombreUsuario(userPrueba.getNombreUsuario())
-                .contrasena(userPrueba.getContrasena())
+                .id(System.currentTimeMillis() + "1")
+                .nombreUsuario("Daniel")
+                .contrasena("123456")
                 .roles(userPrueba.getRoles())
                 .build();
 
         repository.save(userPrueba);
         repository.save(usuario2);
 
-        assertThat(repository.findAll()).isNotEmpty();
-        assertThat(repository.findAll().size()).isEqualTo(2);
+        List<UserEntity> todos = repository.findAll();
+
+        assertThat(todos).isNotEmpty();
+        assertThat(todos.size()).isEqualTo(2);
     }
 
     @DisplayName("Test de encontrar usuario por Id")
