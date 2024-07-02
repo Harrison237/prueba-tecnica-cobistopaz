@@ -14,10 +14,10 @@ public interface IUserMapper {
     @Mapping(source = "nombreUsuario", target = "nombreUsuario")
     @Mapping(source = "contrasena", target = "contrasena")
     @Mapping(source = "roles", target = "roles")
-    public User desdeDtoADomain(RegisterUserDto dto);
+    User desdeDtoADomain(RegisterUserDto dto);
 
     @Mapping(source = "nombreUsuario", target = "nombreUsuario")
     @Mapping(source = "contrasena", target = "contrasena")
     @Mapping(source = "roles", target = "roles")
-    public RegisterUserDto desdeDomainADto(User user);
+    RegisterUserDto desdeDomainADto(User user);
 }

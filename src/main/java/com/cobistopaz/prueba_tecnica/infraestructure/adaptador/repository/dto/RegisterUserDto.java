@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class RegisterUserDto {
+    private String id;
     @Valid
 
     @NotBlank(message = "El nombre de usuario no puede estar en blanco")

@@ -18,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "user_tabla")
 @DynamicUpdate
 public class UserEntity {
     @Id @Column(name = "id")

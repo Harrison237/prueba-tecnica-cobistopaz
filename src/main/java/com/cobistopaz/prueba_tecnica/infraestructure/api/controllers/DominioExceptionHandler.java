@@ -1,9 +1,7 @@
 package com.cobistopaz.prueba_tecnica.infraestructure.api.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,16 +17,12 @@ import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioExistenteException
 import com.cobistopaz.prueba_tecnica.domain.exceptions.UsuarioNoEncontradoException;
 import com.cobistopaz.prueba_tecnica.domain.web.RespuestaHttp;
 import com.cobistopaz.prueba_tecnica.domain.web.factorias.RespuestaHttpFactory;
-import com.google.gson.Gson;
 
 import lombok.AllArgsConstructor;
 
 @RestControllerAdvice
 @AllArgsConstructor
 public class DominioExceptionHandler {
-
-    @Autowired
-    private Gson gson;
 
     @ExceptionHandler(UsuarioNoEncontradoException.class)
     public ResponseEntity<RespuestaHttp> manejadorUsuarioNoEncontrado(UsuarioNoEncontradoException e) {
