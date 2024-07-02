@@ -1,4 +1,4 @@
-Hola muy buenos días, tardes o noches, según la hora en que esté siendo este documento.
+Hola muy buenos días, tardes o noches, según la hora en que esté siendo leído este documento.
 El presente proyecto fue desarrollado por Harrison Daniel Ramírez Burgos como una prueba técnica para aplicar
 al puesto de developer en la empresa CobisTopaz.
 
