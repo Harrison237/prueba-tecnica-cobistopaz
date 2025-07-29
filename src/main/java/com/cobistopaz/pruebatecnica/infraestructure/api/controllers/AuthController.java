@@ -20,7 +20,6 @@ import com.cobistopaz.pruebatecnica.infraestructure.adaptador.repository.dto.Reg
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.AllArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,17 +31,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequestMapping(value = "api/auth")
 public class AuthController {
 
-    @Autowired
     IAuthService authService;
 
     @Operation(
             summary = "Ingresar en el sistema",
             description = "Se encarga de validar las credenciales ingresadas. En caso de que sean correctas, otorgará un token de autorización para utilizar los métodos del Controlador de Usuarios, si no, retornará un mensaje de error."
     )
-    @ApiResponses({
-            @ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = RespuestaHttp.class), mediaType = MediaType.APPLICATION_JSON_VALUE)),
-            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = RespuestaHttp.class), mediaType = MediaType.APPLICATION_JSON_VALUE), description = "Se retorna este mensaje de error cuando las credenciales otorgadas no son validas, ya sea porque el usuario no existe o porque el usuario y la contraseña no coinciden. Puede generar usuarios sin estar auténticado desde el método \"Registrar usuario\" de este mismo controlador."),
-    })
+    @ApiResponse(responseCode = "202", content = @Content(schema = @Schema(implementation = RespuestaHttp.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = RespuestaHttp.class), mediaType = MediaType.APPLICATION_JSON_VALUE), description = "Se retorna este mensaje de error cuando las credenciales otorgadas no son validas, ya sea porque el usuario no existe o porque el usuario y la contraseña no coinciden. Puede generar usuarios sin estar auténticado desde el método \"Registrar usuario\" de este mismo controlador.")
     @PostMapping(value = "login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RespuestaHttp<IAuthResponse>> getToken(@RequestBody AuthUserDto credenciales) throws Exception {
         IAuthResponse respuesta = authService.ingresar(credenciales);
